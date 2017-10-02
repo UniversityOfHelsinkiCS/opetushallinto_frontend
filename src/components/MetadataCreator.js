@@ -1,5 +1,5 @@
 import React from 'react'
-const base64 = require('base-64')
+import { updateMetadata } from '../services'
 
 class MetadataCreator extends React.Component {
   constructor(){
@@ -16,14 +16,9 @@ class MetadataCreator extends React.Component {
       disabled: true
     })
 
-    fetch(
-      'https://opetushallinto.cs.helsinki.fi/courses/create_metadata',
-      { method: 'POST',
-        headers: new Headers().append('Authorization', TOKEN)
-      }
-    ).then( response => response.json()
-    ).then( data => {
-      console.log(data)
+    updateMetadata()
+    .then( response => response.json() )
+    .then( data => {
       this.setState({
         response: JSON.stringify(data) 
       })   
@@ -37,7 +32,6 @@ class MetadataCreator extends React.Component {
 
       setTimeout(callback, 5000)   
     })
-
   }
 
   render() {

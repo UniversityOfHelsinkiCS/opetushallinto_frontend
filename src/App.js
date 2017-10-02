@@ -1,6 +1,7 @@
 import React from 'react'
 import Errors from './components/Errors'
 import MetadataCreator from './components/MetadataCreator'
+import { getErrors } from './services'
 
 class App extends React.Component {
   constructor() {
@@ -10,7 +11,7 @@ class App extends React.Component {
     }
   }
   componentWillMount() {
-    fetch('https://opetushallinto.cs.helsinki.fi/update_status.json')
+    getErrors()
     .then( response => response.json() )
     .then( data => {
       this.setState(data)
