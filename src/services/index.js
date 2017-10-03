@@ -9,3 +9,8 @@ export const updateMetadata = () =>
       headers: new Headers().append('Authorization', TOKEN)
     }
   )
+
+export const coursesFor = (organization) => {
+  const url = `https://opetushallinto.cs.helsinki.fi/organizations/${organization}/cached_courses.json`
+  return fetch(url)
+} 

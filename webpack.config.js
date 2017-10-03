@@ -1,16 +1,17 @@
 const path = require('path')
-const ExtendedDefinePlugin = require('extended-define-webpack-plugin');
+const ExtendedDefinePlugin = require('extended-define-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.resolve('dist'),
+    path: path.join(__dirname, 'dist'),
     filename: './app.js'
   },
   devServer: {
     port: 8000,
-    contentBase: 'dist'
+    contentBase: 'dist',
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
