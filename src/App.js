@@ -3,14 +3,7 @@ import Status from './components/Status'
 import Courses from './components/Courses'
 import { getErrors } from './services'
 import { Route, NavLink } from 'react-router-dom'
-
-const HomePage = () => <div>Home Page</div>
-const UsersPage = () => <div>Users Page</div>
-
-const Course = () => { 
-  console.log("**")
-  return(<p>kurssi</p>) 
-}
+import { Container } from 'reactstrap'
 
 class App extends React.Component {
   constructor() {
@@ -28,7 +21,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div>
+      <Container>
         <header className='header'>
           <NavLink className='padding' to="/" exact activeClassName="active">status</NavLink>
           <NavLink className='padding' to="/courses/500-K005" exact activeClassName="active">kandi</NavLink>
@@ -43,15 +36,12 @@ class App extends React.Component {
           <Route path="/" exact render={() => 
             <Status status={this.state.status}/>
           } />
-          <Route path="/courses/:id" exact render={(props) => 
+          <Route path="/courses/:id" render={(props) => 
             <Courses id={props.match.params.id}/>           
-          } />
-          <Route path="/courses/1/2" exact render={() => 
-          <Course />
-          } />          
-          
-        </div>        
-      </div>
+          } />                 
+        </div>    
+             
+      </Container>
     )
   }
 }

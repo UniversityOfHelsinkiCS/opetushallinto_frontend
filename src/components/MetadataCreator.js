@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Alert } from 'reactstrap'
 import { updateMetadata } from '../services'
 
 class MetadataCreator extends React.Component {
@@ -35,29 +36,22 @@ class MetadataCreator extends React.Component {
   }
 
   render() {
-    const message = (response) => {
-      if ( this.state.response===null ) {
-        return null
-      }
-
-      return (
-        <div className='message'>
-          {this.state.response}
-        </div>
-      )
-    }
-
 
     return(
       <div>
         <h3>Course metadata creation</h3>
         <p>If there are errors, a possible cause is missing metadata creation.</p>
-        <button 
+        <Button 
           onClick={this.fetchMetadata}
           disabled={this.state.disabled}>
           ensure that all course metadata is in kurki
-        </button>
-        {message(this.state.response)}
+        </Button>
+
+        {(this.state.response)&&
+        <Alert color="success">
+          {this.state.response}
+        </Alert>}
+
       </div>
     )
     
