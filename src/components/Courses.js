@@ -1,10 +1,10 @@
 import React from 'react'
 import { Route, NavLink } from 'react-router-dom'
 import { Table } from 'reactstrap'
-import { RadioGroup, Radio } from 'react-radio-group'
-import { coursesFor} from '../services'
+import { coursesFor } from '../services'
 import { asCourseObject, by } from '../lib/CourseObject'
 import Course from './Course'
+import CourseSelector from './CourseSelector'
 
 const CourseTableHeader = ({setOrder, current}) => {
   const onClick = (criteria) => {
@@ -49,12 +49,12 @@ class Courses extends React.Component {
 
     this.state = {
       courses: [],
-      filter: 'course',
       order: 'name',
+      filter: 'course',
       yearFilter: yearNow()
     }
-    this.setCourseFilter = this.setCourseFilter.bind(this)
-    this.setYearFilter = this.setYearFilter.bind(this)    
+
+    this.setFilters = this.setFilters.bind(this) 
     this.setOrder = this.setOrder.bind(this)
     this.setTimestamps = this.setTimestamps.bind(this)
   }
@@ -72,17 +72,11 @@ class Courses extends React.Component {
     this.setState({courses: courses.concat(asCourseObject(hash))})
   }
 
-  setCourseFilter(filter) {
-    this.setState({filter})
-  }
-
-  setYearFilter(yearFilter) {
-    console.log(yearFilter)
-    this.setState({yearFilter})
+  setFilters({filter, yearFilter}) {
+    this.setState({filter, yearFilter})
   }
 
   setOrder(order) {
-    console.log('order set', order)
     this.setState({order})
   }
 
@@ -121,47 +115,12 @@ class Courses extends React.Component {
             updateTimestamps={this.setTimestamps}
           /> 
         )} />
-        <Route path="/courses/:id/" exact render={ ( )=> (
+        <Route path="/courses/:id/" exact render={ () => (
           <div>
             <h2>courses of {this.props.id}</h2>
-            <div className='filter'>
-              <RadioGroup 
-                    name="filter" 
-                    selectedValue={this.state.filter} 
-                    onChange={this.setCourseFilter}>
-                <span className='padding'>
-                  all <Radio value="all" />
-                </span>
-                <span className='padding'>
-                  courses <Radio value="course" />
-                </span>
-                <span className='padding'>
-                  exams <Radio value="exam" />
-                </span>
-                <span className='padding'>
-                  labs <Radio value="lab" />
-                </span>         
-                <span className='padding'>
-                  seminars <Radio value="seminar" />
-                </span>                      
-              </RadioGroup> 
-            </div>
-            <div className='year-filter'>
-              <RadioGroup 
-                  name='yearFilter'
-                  selectedValue={this.state.yearFilter} 
-                  onChange={this.setYearFilter}>                   
-                <span className='padding'>
-                  2017 <Radio value="2017" />
-                </span>
-                <span className='padding'>
-                  2018 <Radio value="2018" />
-                </span>
-                <span className='padding'>
-                  all <Radio value="all" />
-                </span>                                
-              </RadioGroup> 
-            </div>
+
+            <CourseSelector setFilters={this.setFilters} />
+
             <Table>
               <CourseTableHeader setOrder={this.setOrder} current={this.state.order}/>
               <tbody>
