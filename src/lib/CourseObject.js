@@ -41,15 +41,17 @@ class CourseObject {
 
   get type() {
     const code = this.data.realisation_type_code
-    if ( code==5 ) {
+    if ( code===5 && this.data.parent_id===null) {
       return "course";
-    } else if (code==7) {
+    } else if (code===7 || code==17 || (code===5 && this.data.parent_id!==null)) {
       return "group";
-    } else if (code==8) {
+    } else if (code===3) {
+      return "study group";  
+    } else if (code===8) {
       return "exam";
-    } else if (code==10) {
+    } else if (code===10) {
       return "seminar";          
-    } else if (code==22) {
+    } else if (code===22) {
       return "lab";
     } else {
       return "unknown "+code;   

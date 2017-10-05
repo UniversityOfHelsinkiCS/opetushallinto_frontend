@@ -116,19 +116,89 @@ class Registrations extends React.Component {
   }
 }
 
-class Course extends React.Component {
+class Metadata extends React.Component {
   constructor(props){
     super(props)
 
-    console.log('ctor')
-    const course = this.byId(this.props.id)
+    const course = this.props.course
     this.state = {
-      course,
       metadataResponse: null,
       metadataDisabled: false,
       metadata_updated: course && course.metadata
     }
     this.updateMetadata = this.updateMetadata.bind(this)
+  }
+
+  updateMetadata() {
+    this.setState({metadataDisabled: true, metadataResponse: "updating metadata..."})
+    updateMetadataOf(this.props.course.id)
+    .then(response => {
+      const data = response.data
+
+      this.setState({
+        metadataResponse: JSON.stringify(data.result),
+        metadata_updated: data.time
+      })
+
+      const {course} = this.props
+      this.props.updateTimestamps(course, {updated: course.updated, metadata: data.time}) 
+
+      setTimeout(() => {
+        this.setState({metadataResponse: null, metadataDisabled: false})
+      }, 8000)
+    })
+    .catch(error => {
+      const metadataError = `updating metadata failed, contanct system admin`
+      const metadataErrorLong = [error.request.responseURL, error.response.status, error.message, ]
+      
+      this.setState({
+        metadataError,
+        metadataErrorLong,
+        metadataResponse: null
+      })    
+      setTimeout(() => {
+        this.setState({metadataError: null, metadataErrorLong: null, metadataDisabled: false})
+      }, 120000)
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Metadata (updated {this.state.metadata_updated})</h3>
+      
+        <Button
+          disabled={this.state.metadataDisabled} 
+          color="warning" 
+          onClick={this.updateMetadata}>
+          update metadata
+        </Button>
+
+        {(this.state.metadataResponse)&&
+        <Alert color="success">
+          {this.state.metadataResponse}
+        </Alert>}    
+
+        {(this.state.metadataError)&&
+        <Alert color="danger">
+          <h4>{this.state.metadataError}</h4>
+          <br/>
+          <ul>
+            {this.state.metadataErrorLong.map((e,i)=><li key={i}>{e}</li>)}
+          </ul>
+        </Alert>}         
+      </div>    
+    )
+  }
+}
+
+class Course extends React.Component {
+  constructor(props){
+    super(props)
+
+    this.state = {
+      course: this.byId(this.props.id)
+    }
   }
 
   byId(id) {
@@ -140,29 +210,6 @@ class Course extends React.Component {
     this.setState({course})
   }
 
-  updateMetadata() {
-    this.setState({metadataDisabled: true, metadataResponse: "updating metadata..."})
-    updateMetadataOf(this.state.course.id)
-    .then(response => {
-      const data = response.data
-
-      console.log(data.time)
-
-      this.setState({
-        metadataResponse: JSON.stringify(data.result),
-        metadata_updated: data.time
-      })
-
-      const {course} = this.state 
-      this.props.updateTimestamps(course, {updated: course.updated, metadata: data.time}) 
-
-      setTimeout(() => {
-        this.setState({metadataResponse: null, metadataDisabled: false})
-      }, 8000)
-    })
-    .catch(error => console.log(error))
-  }
-
   render() {
     const {course} = this.state
 
@@ -170,7 +217,7 @@ class Course extends React.Component {
       return null
     }
 
-    const groups = course.child_ids.map(id=>this.byId(id) )
+    const groups = course.child_ids.map( id => this.byId(id) )
 
     return(
       <div>
@@ -183,19 +230,7 @@ class Course extends React.Component {
 
         <Registrations course={course} updateTimestamps={this.props.updateTimestamps} />
 
-        <h3>Metadata (updated {this.state.metadata_updated})</h3>
-
-        <Button
-          disabled={this.state.metadataDisabled} 
-          color="warning" 
-          onClick={this.updateMetadata}>
-          update metadata
-        </Button>
-
-        {(this.state.metadataResponse)&&
-        <Alert color="success">
-          {this.state.metadataResponse}
-        </Alert>}  
+        <Metadata course={course} updateTimestamps={this.props.updateTimestamps} />
       </div>
     ) 
   }
