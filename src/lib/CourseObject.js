@@ -56,11 +56,24 @@ class CourseObject {
     } 
   }  
  
-  matches(filter) {
+  get year() {
+    return this.data.start_date.split('-')[0]
+  }
+
+  matches(filter, yearFilter) {
+    this.year
     if ( filter==='all' ) {
       return true
     }
+
+    if ( yearFilter!=='all' && this.year!==yearFilter ) {
+      return false
+    }
     return filter === this.type
+  }
+
+  get startMoment() {
+    return -(new Date(this.data.start_date).getTime())
   }
 
   get time() {
@@ -127,5 +140,32 @@ class CourseObject {
 }
 
 export const asCourseObject = (hash) => { return new CourseObject(hash) }
+
+export const by = (criteria) => {
+  const inValidCriteria = ['name', 'code', 'registrations', 'startMoment'].indexOf(criteria) === -1
+  if ( inValidCriteria ) {
+    criteria = 'name'
+  }
+
+  const valueOf = (c, criteria) => {
+    if ( criteria==='registrations') {
+      return -c.students.length
+    }
+
+    return c[criteria]
+  }
+
+  return (c1, c2) => {
+    const c1_val = valueOf(c1, criteria)
+    const c2_val = valueOf(c2, criteria)
+
+    if ( c1_val < c2_val ) {
+      return -1;
+    } else if ( c2_val < c1_val ) {
+      return 1;
+    }
+    return 0
+  }
+}
 
 export default CourseObject

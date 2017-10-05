@@ -15,4 +15,24 @@
 }
 .active{
   background-color: #BCB2B2;
+  font-style: italic  
+}
+.criteria{
+  color: #8575C1;
+}
+.selectedCriteria{
+  color: #29189F;
+  font-style: italic
+}
+.filter{
+  display: inline-block;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin-bottom: 2px;
+}
+.year-filter{
+  float: right;
+  border: 1px solid lightgray;
+  border-radius: 5px;  
+  margin-bottom: 2px;
 }

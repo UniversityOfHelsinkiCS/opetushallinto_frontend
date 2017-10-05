@@ -57,18 +57,24 @@ class Registrations extends React.Component {
   }
 
   updateRegistrations() {
-    this.setState({registrateDisabled: true, registrationResponse: "updating..."})
+    this.setState({registrateDisabled: true, registrationResponse: "updating registrations..."})
     updateRegistrations(this.props.course.id)
-    .then( response => response.json() )
-    .then(data => {
+    .then(response => {
+      const data = response.data
+
       this.setState({
         registrationResponse: `updated registration of ${data.result.length} students`,
         updated_at: data.time
       })
+      
+      const {course} = this.props
+      this.props.updateTimestamps(course, {updated: data.time, metadata:course.metadata } )
+
       setTimeout(() => {
         this.setState({registrationResponse: null, registrateDisabled: false})
       }, 8000)
     })
+    .catch(error => console.log(error))
   }
   
   render() {
@@ -114,6 +120,7 @@ class Course extends React.Component {
   constructor(props){
     super(props)
 
+    console.log('ctor')
     const course = this.byId(this.props.id)
     this.state = {
       course,
@@ -130,23 +137,30 @@ class Course extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const course = this.byId(nextProps.id)
-    this.setState({course, metadata_updated: course && course.metadata})
+    this.setState({course})
   }
 
   updateMetadata() {
-    this.setState({metadataDisabled: true, metadataResponse: "updating..."})
+    this.setState({metadataDisabled: true, metadataResponse: "updating metadata..."})
     updateMetadataOf(this.state.course.id)
-    .then( response => response.json() )
-    .then(data => {
-      console.log(data)
+    .then(response => {
+      const data = response.data
+
+      console.log(data.time)
+
       this.setState({
-        metadataResponse: JSON.stringify(data),
+        metadataResponse: JSON.stringify(data.result),
         metadata_updated: data.time
       })
+
+      const {course} = this.state 
+      this.props.updateTimestamps(course, {updated: course.updated, metadata: data.time}) 
+
       setTimeout(() => {
         this.setState({metadataResponse: null, metadataDisabled: false})
       }, 8000)
     })
+    .catch(error => console.log(error))
   }
 
   render() {
@@ -167,7 +181,7 @@ class Course extends React.Component {
       
         <Groups groups={groups} course={course} />
 
-        <Registrations course={course}/>
+        <Registrations course={course} updateTimestamps={this.props.updateTimestamps} />
 
         <h3>Metadata (updated {this.state.metadata_updated})</h3>
 

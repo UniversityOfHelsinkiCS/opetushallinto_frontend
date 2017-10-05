@@ -18,10 +18,9 @@ class MetadataCreator extends React.Component {
     })
 
     updateMetadata()
-    .then( response => response.json() )
-    .then( data => {
+    .then( response => {
       this.setState({
-        response: JSON.stringify(data) 
+        response: JSON.stringify(response.data) 
       })   
 
       const callback =  () => { 
@@ -33,6 +32,7 @@ class MetadataCreator extends React.Component {
 
       setTimeout(callback, 5000)   
     })
+    .catch(error => console.log(error))
   }
 
   render() {

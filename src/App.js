@@ -14,15 +14,17 @@ class App extends React.Component {
   }
   componentWillMount() {
     getErrors()
-    .then( response => response.json() )
-    .then( data => {
-      this.setState({status: data})
+    .then( response => {
+      this.setState({status: response.data})
     })
   }
   render() {
     return (
       <Container>
         <header className='header'>
+          <span className='padding'>
+            <a href="https://opetushallinto.cs.helsinki.fi">juuri</a>
+          </span>
           <NavLink className='padding' to="/" exact activeClassName="active">status</NavLink>
           <NavLink className='padding' to="/courses/500-K005" exact activeClassName="active">kandi</NavLink>
           <NavLink className='padding' to="/courses/500-M009" exact activeClassName="active">maisteri</NavLink>

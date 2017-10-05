@@ -1,7 +1,9 @@
-export const getErrors = () => 
-  fetch(`https://opetushallinto.cs.helsinki.fi/update_status.json?authorization=${TOKEN}`)  
+import axios from 'axios'
 
-export const updateMetadata = () =>     
+export const getErrors = () => 
+  axios(`https://opetushallinto.cs.helsinki.fi/update_status.json?authorization=${TOKEN}`)  
+
+export const _updateMetadata = () =>     
   fetch(
     `https://opetushallinto.cs.helsinki.fi/courses/create_metadata?authorization=${TOKEN}`,
     { 
@@ -10,31 +12,25 @@ export const updateMetadata = () =>
     }
   )
 
+export const updateMetadata = () =>     
+  axios.post(
+    `https://opetushallinto.cs.helsinki.fi/courses/create_metadata?authorization=${TOKEN}`,
+    { headers: { Authorization: TOKEN } }
+  )
+
+
 export const coursesFor = (organization) => {
   const url = `https://opetushallinto.cs.helsinki.fi/organizations/${organization}/cached_courses.json`
-  return fetch(url,
-    { 
-      headers: new Headers().append('Authorization', TOKEN)
-    }
-  )
+  return axios.get(url)
 } 
 
 export const updateRegistrations = (id) =>  {
   const url = `https://opetushallinto.cs.helsinki.fi/courses/${id}?authorization=${TOKEN}`
-  return fetch(
-    url,
-    { 
-      method: 'POST'
-    }
-  )
+  return axios.post(url)
 }  
+
 
 export const updateMetadataOf = (id) => {
   const url = `https://opetushallinto.cs.helsinki.fi/courses/${id}/metadata?authorization=${TOKEN}`
-  return fetch(
-    url,
-    { 
-      method: 'POST'
-    }
-  )
+  return axios.post(url)
 }  
