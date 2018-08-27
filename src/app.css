@@ -1,38 +1,60 @@
 .error {
-  color:red;
+  color: red;
 }
+
+.metadata {
+  margin-bottom: 15px;
+}
+
 .message {
   background-color: lightgray;
   margin: 10px;
   padding: 3px;
 }
+
 .header{
   background-color: lightgray;
   padding: 5px;
 }
+
 .padding{
   padding: 5px;
 }
+
 .active{
   background-color: #BCB2B2;
   font-style: italic  
 }
+
 .criteria{
   color: #8575C1;
 }
+
 .selectedCriteria{
   color: #29189F;
   font-style: italic
 }
+
 .filter{
   display: inline-block;
   border: 1px solid lightgray;
   border-radius: 5px;
   margin-bottom: 2px;
 }
+
 .year-filter{
   float: right;
   border: 1px solid lightgray;
   border-radius: 5px;  
   margin-bottom: 2px;
 }
+
+.react-spinner {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  top: 50%;
+  left: 50%;
+}
+
+

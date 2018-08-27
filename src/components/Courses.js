@@ -21,6 +21,7 @@ const CourseTableHeader = ({setOrder, current}) => {
         <th>type</th>
         <th className={current==='startMoment'? 'selectedCriteria' : 'criteria'}  onClick={onClick('startMoment')}>time</th>
         <th className={current==='registrations'? 'selectedCriteria' : 'criteria'}  onClick={onClick('registrations')}>registrations</th>
+        <th>room for</th>
         <th>registrations updated</th>
         <th>metadata updated</th>
       </tr>
@@ -28,7 +29,7 @@ const CourseTableHeader = ({setOrder, current}) => {
   )
 }
 
-const CourseRow = ({course, id}) => (
+const CourseRow = ({ course, id}) => (
   <tr>
     <td>{course.id}</td>
     <td>{course.code}</td>
@@ -36,6 +37,7 @@ const CourseRow = ({course, id}) => (
     <td>{course.type}</td>
     <td>{course.time}</td>
     <td>{course.students.length}</td>
+    <td>{course.group_size_sum}</td>
     <td>{course.updated}</td>
     <td>{course.metadata}</td>            
   </tr>
@@ -62,14 +64,14 @@ class Courses extends React.Component {
   setTimestamps(course, timestamps) {
     const id = course.id
   
-    const courses = this.state.courses.filter(c=>c.id!==id)
+    const courses = this.state.courses.filter(c => c.id!==id)
     const hash = {
       data: course.data,
       updated: timestamps.updated,
       metadata: timestamps.metadata
     }
 
-    this.setState({courses: courses.concat(asCourseObject(hash))})
+    this.setState({ courses: courses.concat(asCourseObject(hash)) })
   }
 
   setFilters({filter, yearFilter}) {
@@ -81,10 +83,36 @@ class Courses extends React.Component {
   }
 
   fetchCoursesFor(org) {
+    const withgroupInfo = (c, map) => {
+      if (c.child_ids.length===0) {
+        return c
+      }
+
+      const groups = c.child_ids.filter(id => map[id])
+        .map(id => map[id].data.group_max_size)
+        .filter(s => s!==99 && s!=999 && s!==null)
+
+      if (groups.length===0) {
+        return c
+      }
+
+      c.group_size_sum = groups.reduce((s, g) => s+g, 0)
+      return c
+    }
+
     coursesFor(org)
     .then(response => {
       const courses = response.data.json.map( c => asCourseObject(c) )
-      this.setState({ courses  })
+      
+      const courseMap = courses.reduce((m, c) => { 
+        m[c.data.course_id] = c ; return m}, 
+        {}
+      )
+
+      const coursesWithGroupsize = courses
+        .map(c => withgroupInfo(c, courseMap))
+
+      this.setState({ courses: coursesWithGroupsize })
     })
     .catch(error => console.log(error))
   }

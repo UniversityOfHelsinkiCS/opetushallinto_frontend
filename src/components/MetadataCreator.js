@@ -38,7 +38,7 @@ class MetadataCreator extends React.Component {
   render() {
 
     return(
-      <div>
+      <div className='metadata'>
         <h3>Course metadata creation</h3>
         <p>If there are errors, a possible cause is missing metadata creation.</p>
         <Button 

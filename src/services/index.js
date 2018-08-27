@@ -20,7 +20,7 @@ export const updateMetadata = () =>
 
 
 export const coursesFor = (organization) => {
-  const url = `https://opetushallinto.cs.helsinki.fi/organizations/${organization}/cached_courses.json`
+  const url = `https://opetushallinto.cs.helsinki.fi/organizations/${organization}/cached_courses.json?authorization=${TOKEN}`
   return axios.get(url)
 } 
 

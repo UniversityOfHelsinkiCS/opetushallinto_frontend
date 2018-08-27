@@ -3,7 +3,8 @@ import { Route, NavLink } from 'react-router-dom'
 import { Badge, Table, Button, Alert } from 'reactstrap'
 import { updateRegistrations, updateMetadataOf } from '../services'
 
-const GroupRow = ({group}) => {
+const GroupRow = ({ group }) => {
+  console.log(group)
   return (
     <tr>
       <td>{group.id}</td>
@@ -14,6 +15,7 @@ const GroupRow = ({group}) => {
       <td>{group.time}</td>
       <td>{group.type}</td>
       <td>{group.students.length}</td>
+      <td>{group.data.group_max_size}</td>
     </tr>
   )
 }
@@ -35,6 +37,7 @@ const Groups = ({groups, course}) => {
             <th> <a>time</a> </th>
             <th> <a>type</a> </th>
             <th> <a>registrations</a> </th>
+            <th> <a>group size</a> </th>
           </tr>
         </thead>
         <tbody>

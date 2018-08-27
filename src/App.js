@@ -9,13 +9,13 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      status: {errors:[]}
+      status: { errors: [], warnings: [] }
     }
   }
   componentWillMount() {
     getErrors()
     .then( response => {
-      this.setState({status: response.data})
+      this.setState({ status: response.data })
     })
   }
   render() {
