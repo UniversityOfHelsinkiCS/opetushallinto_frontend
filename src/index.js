@@ -6,6 +6,8 @@ import { HashRouter } from 'react-router-dom'
 import App from './App'
 import 'bootstrap/dist/css/bootstrap.css'
 
+console.log('**')
+
 ReactDOM.render(
   <HashRouter>
     <App />

@@ -8,7 +8,9 @@ class CourseObject {
   get name() {
     var cname = this.data.learningopportunity_name[0].text;
     if ( this.data.realisation_type_code == 5 || this.data.realisation_type_code == 22 ) {
-      cname = this.data.realisation_name[0].text; 
+      if ( this.data.realisation_name.length>0 ) {
+        cname = this.data.realisation_name[0].text;
+      }
     }
 
     var gname = "";

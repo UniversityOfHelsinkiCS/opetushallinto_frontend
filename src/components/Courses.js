@@ -131,7 +131,10 @@ class Courses extends React.Component {
     const byId = (id) => this.state.courses.find( c => c.id===Number(id))
     
     const courses = (filter, yearFilter) => {
-      return this.state.courses.filter(c=>c.matches(filter, yearFilter)).sort(by(this.state.order)) 
+      return this.state.courses
+        .filter(c=>!c.name.includes('Luennot') && !c.name.includes('Laboratoriotyö'))
+        .filter(c=>c.matches(filter, yearFilter))
+        .sort(by(this.state.order)) 
     }
 
     return(

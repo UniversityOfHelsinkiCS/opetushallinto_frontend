@@ -57,10 +57,10 @@ class CourseSelector extends React.Component {
               selectedValue={this.state.yearFilter} 
               onChange={this.setYearFilter}>                   
             <span className='padding'>
-              2017 <Radio value="2017" />
+              2020 <Radio value="2020" />
             </span>
             <span className='padding'>
-              2018 <Radio value="2018" />
+              2021 <Radio value="2021" />
             </span>
             <span className='padding'>
               all <Radio value="all" />

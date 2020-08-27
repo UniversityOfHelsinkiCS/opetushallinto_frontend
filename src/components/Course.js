@@ -220,7 +220,22 @@ class Course extends React.Component {
       return null
     }
 
-    const groups = course.child_ids.map( id => this.byId(id) )
+    const getGroupsOf = (course) => {
+      let acualChilds = []
+      const childs = course.child_ids.map( id => this.byId(id) )
+
+      childs.forEach( childCourse => {
+        console.log(childCourse.name, childCourse)
+        if (childCourse.name.includes('Harjoitusryhmä')) {
+          const moarChilds = childCourse.child_ids.map( id => this.byId(id) )
+          acualChilds = acualChilds.concat(moarChilds)
+        }
+      })
+
+      return acualChilds
+    }
+
+    const groups = getGroupsOf(course)
 
     return(
       <div>
